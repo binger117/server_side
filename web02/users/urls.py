@@ -35,6 +35,11 @@ urlpatterns = [
     path('<int:pk>/avatar/upload', views.UserView.as_view({
         'post': 'upload_avatar'
     })),
+    # 添加地址和获取地址列表的路由
+    path('address/', views.AddrView.as_view({
+        "post": "create",
+        "get": "list"
+    })),
     # 修改收货地址和删除收货地址
     path('address/<int:pk>/', views.AddrView.as_view({
         "delete": "destroy",

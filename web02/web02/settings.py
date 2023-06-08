@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
+    'django_filters',
     'rest_framework',
     'corsheaders',
     'users',
@@ -142,13 +143,18 @@ CORS_ORIGIN_ALLOW = True
 AUTH_USER_MODEL = 'users.User'
 
 # DRF的配置
-REST_FRAMEWORK  = {
+REST_FRAMEWORK = {
     # 配置登录鉴权方式
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    # 配置DRF使用的过滤器
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter'
+    ],
 }
 
 # token的相关配置

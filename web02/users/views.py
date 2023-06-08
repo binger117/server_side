@@ -15,7 +15,7 @@ from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import User, Addr
-from users.permissions import UserPermission
+from users.permissions import UserPermission, AddrPermission
 from users.serializers import UserSerializer, AddrSerializer
 from web02.settings import MEDIA_ROOT
 
@@ -268,3 +268,12 @@ class AddrView(GenericViewSet,
     """收货地址管理视图"""
     queryset = Addr.objects.all()
     serializer_class = AddrSerializer
+    # 设置认证用户才能有权限访问
+    permission_classes = [IsAuthenticated, AddrPermission]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        # 通过请求过来的认证用户进行过滤
+        queryset = queryset.filter(user=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
