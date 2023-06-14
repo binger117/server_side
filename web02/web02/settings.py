@@ -155,6 +155,10 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.OrderingFilter'
     ],
+    # 配置限流频率
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1/minute'
+    }
 }
 
 # token的相关配置

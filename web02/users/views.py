@@ -1,5 +1,7 @@
 import os.path
+import random
 import re
+import time
 
 from django.http import FileResponse
 from django.shortcuts import render
@@ -8,13 +10,15 @@ from django.shortcuts import render
 from rest_framework import status, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework.views import APIView
 from rest_framework.viewsets import GenericViewSet
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from users.models import User, Addr
+from common.aliyun_sms import AliyunMessage
+from users.models import User, Addr, VerifCode
 from users.permissions import UserPermission, AddrPermission
 from users.serializers import UserSerializer, AddrSerializer
 from web02.settings import MEDIA_ROOT
@@ -97,7 +101,6 @@ class UserView(GenericViewSet, mixins.RetrieveModelMixin):
         ser.save()
         return Response({'url': ser.data['avatar']})
 
-    '''
     def bind_mobile(self, request, *args, **kwargs):
         """绑定手机视图"""
         # 1、获取参数
@@ -248,7 +251,40 @@ class UserView(GenericViewSet, mixins.RetrieveModelMixin):
                 return {'error': "验证码已过期，请从新获取验证码"}
         else:
             return {'error': "验证码验证失败，请从新获取验证码！"}
-'''
+
+class SendSMSView(APIView):
+    """发送短信验证码"""
+    # 设置限流(每分钟只能获取一次)
+    throttle_classes = (AnonRateThrottle,)
+
+    def post(self, request):
+        # 获取手机号码
+        mobile = request.data.get('mobile', '')
+        # 验证手机号码格式是否正确(正则表达式匹配)
+        res = re.match(r'^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$', mobile)
+        if not res:
+            return Response({'error': "无效的手机号码"}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        # 随机生成一个6位数的验证码
+        code = self.get_random_code()
+        # 发送短信验证码
+        result = AliyunMessage().send_msg(mobile, code)
+        if result['code'] == 'OK':
+            # 将短信验证码入库
+            obj = VerifCode.objects.create(mobile=mobile, code=code)
+            result['codeID'] = obj.id
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response(result, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def get_random_code(self):
+        """随机生成一个6位数的验证码"""
+        # code2 = ''.join([random.choice(range(9))for i in range(6)])
+        code = ''
+        for i in range(6):
+            # 随机生成0-9中的一个数据
+            n = random.choice(range(10))
+            code += str(n)
+        return code
 
 
 class FileView(APIView):
@@ -277,3 +313,18 @@ class AddrView(GenericViewSet,
         queryset = queryset.filter(user=request.user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def set_default_addr(self, request, *args, **kwargs):
+        """设置默认收货地址"""
+        # 1、获取到要设置的地址对象
+        obj = self.get_object()
+        obj.is_default = True
+        obj.save()
+        # 2、将该地址设置默认收货地址,将用户的其他收货地址设置为非默认
+        # 获取用户收货地址
+        queryset = self.get_queryset().filter(user=request.user)
+        for item in queryset:
+            if item != obj:
+                item.is_default = False
+                item.save()
+        return Response({"message": "设置成功"}, status=status.HTTP_200_OK)

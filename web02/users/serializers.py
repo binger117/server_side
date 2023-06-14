@@ -12,7 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AddrSerializer(serializers.ModelSerializer):
     """收货地址模型序列化器"""
-
     class Meta:
         model = Addr
         fields = '__all__'
