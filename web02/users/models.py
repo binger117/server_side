@@ -13,6 +13,7 @@ class User(AbstractUser, BaseModel):
     class Meta:
         db_table = 'users'
         verbose_name = '用户表'
+        verbose_name_plural = verbose_name
 
 
 class Addr(models.Model):
@@ -29,6 +30,7 @@ class Addr(models.Model):
     class Meta:
         db_table = 'addr'
         verbose_name = '收货表'
+        verbose_name_plural = verbose_name
 
 
 class Area(models.Model):
@@ -39,7 +41,8 @@ class Area(models.Model):
 
     class Meta:
         db_table = 'area'
-        verbose_name = '地狱表'
+        verbose_name = '地域表'
+        verbose_name_plural = verbose_name
 
 
 class VerifCode(models.Model):
@@ -50,4 +53,5 @@ class VerifCode(models.Model):
     class Meta:
         db_table = 'verifcode'
         verbose_name = '验证码表'
+        verbose_name_plural = verbose_name
 
