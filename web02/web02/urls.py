@@ -28,8 +28,8 @@ urlpatterns = [
     # 商品模块接口
     path('api/goods/', include('goods.urls')),
     # 购物车模块接口
-    #path('api/cart/', include('cart.urls')),
+    path('api/cart/', include('cart.urls')),
     # 订单模块
-    #path('api/order/', include('order.urls')),
+    path('api/order/', include('order.urls')),
 
 ]
