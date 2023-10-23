@@ -51,13 +51,14 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # 支持跨域请求 -- 注意顺序
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 支持跨域请求
-    'corsheaders.middleware.CorsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'web02.urls'
@@ -189,4 +190,11 @@ AUTHENTICATION_BACKENDS = [
 MEDIA_ROOT = BASE_DIR / 'file/image'
 # 指定文件的获取的url路径
 MEDIA_URL = 'file/image/'
+
+# 跨域设置
+CORS_Allow_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+# 允许访问的请求头，暂设
+CORS_Allow_HEADERS = ("*")
+
 

@@ -7,4 +7,6 @@ pip指令：
 6.python manage.py createsuperuser 创建djiango站点管理员
 7.mysqldump -u <用户名> -p<密码> <数据库名> > backup.sql 备份数据库
 8.mysql -u <用户名> -p<密码> <数据库名> < backup.sql 备份文件还原数据库
+9.django后台管理员账号：admin   密码：bingerDEmima117
+10.后台项目运端口为8080
 

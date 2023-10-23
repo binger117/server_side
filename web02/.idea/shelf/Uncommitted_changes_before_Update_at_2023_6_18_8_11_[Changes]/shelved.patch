@@ -1,0 +1,14 @@
+Index: projectCommand.txt
+===================================================================
+diff --git a/projectCommand.txt b/projectCommand.txt
+deleted file mode 100644
+--- a/projectCommand.txt	(revision 57255498e8da6d950d9077ff145257757c6d409d)
++++ /dev/null	(revision 57255498e8da6d950d9077ff145257757c6d409d)
+@@ -1,7 +0,0 @@
+-pip指令：
+-1.生成环境配置文件：pip freeze >freezeenvs.txt
+-2.解析环境配置文件并安装：pip install -r freezeenvs.txt
+-3.无法选择新建立的虚拟环境：管理员启动pycharm
+-4.python manage.py makemigratation 模型生成迁移文件
+-5.python manage.py migrate 改动迁移至数据库，完成数据库操作
+-6.python manage.py createsuperuser 创建djiango站点管理员
