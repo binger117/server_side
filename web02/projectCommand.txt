@@ -6,7 +6,7 @@ pip指令：
 5.python manage.py migrate 改动迁移至数据库，完成数据库操作
 6.python manage.py createsuperuser 创建djiango站点管理员
 7.mysqldump -u <用户名> -p<密码> <数据库名> > backup.sql 备份数据库
-8.mysql -u <用户名> -p<密码> <数据库名> < backup.sql 备份文件还原数据库
-9.django后台管理员账号：admin   密码：bingerDEmima117
+8.mysql -u root -p web02_shop < C:\Windows\System32\backup.sql,
+9.django后台管理员网址：http://localhost:8080/admin 账号：admin   密码：bingerDEmima117
 10.后台项目运端口为8080
 
