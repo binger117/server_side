@@ -9,4 +9,8 @@ pip指令：
 8.mysql -u root -p web02_shop < C:\Windows\System32\backup.sql,
 9.django后台管理员网址：http://localhost:8080/admin 账号：admin   密码：bingerDEmima117
 10.后台项目运端口为8080
+11.后续使用git可视化工具：TortoiseGit、SourceTree
+12.新建远程仓库到上传项目至仓库：https://blog.csdn.net/one111a/article/details/106687628，
+https://zhuanlan.zhihu.com/p/193140870
+13.
 
